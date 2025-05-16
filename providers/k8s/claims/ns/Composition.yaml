@@ -1,0 +1,36 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: namespace-composition
+  labels:
+    provider: kubernetes-provider
+spec:
+  compositeTypeRef:
+    apiVersion: altimetrik.com/v1
+    kind: XNamespace
+  writeConnectionSecretsToNamespace: crossplane-system
+  resources:
+  - name: foo-ns
+    base:
+      apiVersion: kubernetes.crossplane.io/v1alpha2
+      kind: Object
+      spec:
+        forProvider:
+          manifest:
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: placeholder # Will be patched
+        providerConfigRef:
+          name: kubernetes-provider
+    patches:
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.namespaceName
+      toFieldPath: spec.forProvider.manifest.metadata.name
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.labels
+      toFieldPath: spec.forProvider.manifest.metadata.labels
+
+  - name: postgresql
+
+  - name: my-go-app

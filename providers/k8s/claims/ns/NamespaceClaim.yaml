@@ -1,0 +1,12 @@
+apiVersion: altimetrik.com/v1
+kind: NamespaceClaim
+metadata:
+  name: my-app-namespace
+  namespace: default
+spec:
+  namespaceName: my-app
+  labels:
+    app: my-application
+    environment: production
+  compositionRef:
+    name: namespace-composition
