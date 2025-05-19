@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Examples - CrossPlane Examples</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Examples";
+        var mkdocs_page_input_path = "examples.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> CrossPlane Examples
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../crossplane/">CrossPlane Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../cnoe-provisioning/">CNOE IDP</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Examples</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#kubernetes-provider">Kubernetes Provider</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#local-kind-k8s-cluster">Local Kind k8s cluster</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-hello-world-namespace-manually">Create hello-world namespace manually</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-my-app-namespace-namespace-with-compositions-and-claims">Create my-app-namespace namespace with Compositions and Claims</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">CrossPlane Examples</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="crossplane-examples">CrossPlane Examples</h1>
+<h2 id="kubernetes-provider">Kubernetes Provider</h2>
+<p>Kubernetes provider is the simplest to use. It requires no integration with external Cloud platforms which makes the tests easy to implement.</p>
+<p>References:</p>
+<ol>
+<li>GitHub Repository: <a href="https://github.com/crossplane-contrib/provider-kubernetes">https://github.com/crossplane-contrib/provider-kubernetes</a></li>
+</ol>
+<h3 id="local-kind-k8s-cluster">Local Kind k8s cluster</h3>
+<p>There are two options:</p>
+<ol>
+<li>Deploy kind and CrossPlane manually from the command line with kubectl.</li>
+<li>Deploy CNOE CrossPlane implementation. </li>
+</ol>
+<h3 id="create-hello-world-namespace-manually">Create <code>hello-world</code> namespace manually</h3>
+<p>Use kubectl to deploy the provider and the <code>Object</code> managed resource to provision a k8s namespace.</p>
+<pre><code class="language-sh">&gt; cd crossplane-examples/providers/k8s
+
+# deploy k8s provider, its configuration and RBAC cluster role to provide the required cluster-wide privlieges
+&gt; kubectl create -f k8s-provider.yaml
+
+# Verify the deployment
+&gt; kubectl get providers
+NAME                  INSTALLED   HEALTHY   PACKAGE                                                   AGE
+provider-aws          True        True      xpkg.upbound.io/crossplane-contrib/provider-aws:v0.48.0   4d20h
+provider-kubernetes   True        True      xpkg.upbound.io/upbound/provider-kubernetes:v0.16.0       3d21h
+
+
+# Deploy the Object managed resource that should create the hello-world namespace
+&gt; kubectl create -f object.yaml
+
+# Verify the deployment
+&gt; kubectl describe Object/hello-world
+Name:         hello-world
+Namespace:
+Labels:       &lt;none&gt;
+Annotations:  crossplane.io/external-create-pending: 2025-05-15T18:56:57Z
+              crossplane.io/external-create-succeeded: 2025-05-15T18:56:57Z
+              crossplane.io/external-name: hello-world
+              uptest.upbound.io/timeout: 60
+API Version:  kubernetes.crossplane.io/v1alpha2
+Kind:         Object
+Metadata:
+  Creation Timestamp:  2025-05-15T18:56:57Z
+  Finalizers:
+    finalizer.managedresource.crossplane.io
+  Generation:        2
+  Resource Version:  82477
+  UID:               0e1cb457-b367-46dd-902d-9cfbaf5e9231
+Spec:
+  Deletion Policy:  Delete
+  For Provider:
+    Manifest:
+      API Version:  v1
+      Kind:         Namespace
+      Metadata:
+        Labels:
+          Example:  true
+  ... ....
+
+# Verify the creation of the k8s namespace
+&gt; kubectl describe ns hello-world
+Name:         hello-world
+Labels:       example=true
+              kubernetes.io/metadata.name=hello-world
+Annotations:  &lt;none&gt;
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+</code></pre>
+<h3 id="create-my-app-namespace-namespace-with-compositions-and-claims">Create <code>my-app-namespace</code> namespace with Compositions and Claims</h3>
+<p>In this example, the target namespace is managed through submission of a Claim.</p>
+<p>The Claim triggers a Composition to perform patching on the fields of the Claim, and the final results is used to create an Object, a managed resource of the Kubernetes provider.</p>
+<p>Create first the <code>CompositeResourceDefinition</code> (XRD) for custom <code>xnamespaces.altimetrik.com</code> XNamespaces Kind.</p>
+<pre><code class="language-sh">&gt; cd crossplane-examples/providers/k8s
+
+# check if the XRD exists
+&gt; k api-resources | grep altimetrik.com
+(no result)
+
+# Create the XRD XNamespace
+&gt; kubectl create -f ns/CompositeResourceDefinition.yaml
+compositeresourcedefinition.apiextensions.crossplane.io/xnamespaces.altimetrik.com created
+
+&gt; kubectl api-resources | grep altimetrik.com
+namespaceclaims                                             altimetrik.com/v1                                    true         NamespaceClaim
+xnamespaces                                                 altimetrik.com/v1                                    false        XNamespace
+
+# Create the Composition that will be used to transform the Claim into the
+# Provider's managed Resource
+&gt; kubectl create -f ns/Composition.yaml
+
+# Create the NamespaceClaim in the default namespace. Keep in mind Claims are namespaced.
+&gt; kubectl create -f ns/NamespaceClaim.yaml
+namespaceclaim.altimetrik.com/my-app-namespace created
+
+&gt; kubectl get NamespaceClaims --all-namespaces
+NAMESPACE   NAME               SYNCED   READY   CONNECTION-SECRET   AGE
+default     my-app-namespace   True     True                        27m
+
+# Verify the mu-app k8s namespace was created
+&gt; kubectl describe ns/my-app
+Name:         my-app
+Labels:       app=my-application
+              environment=production
+              kubernetes.io/metadata.name=my-app
+Annotations:  &lt;none&gt;
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../cnoe-provisioning/" class="btn btn-neutral float-left" title="CNOE IDP"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../cnoe-provisioning/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../about/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
