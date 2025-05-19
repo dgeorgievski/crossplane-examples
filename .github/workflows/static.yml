@@ -1,6 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
-
+name: Deploy mkdocs to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -33,8 +31,12 @@ jobs:
         with:
           python-version: 3.9
       - run: pip install -r requirements.txt
-      - run: mkdocs gh-deploy --config-file mkdocs/mkdocs.yml
+      - name: mkdocs gh-deploy
+        run: mkdocs gh-deploy --config-file mkdocs/mkdocs.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.HELLO_TOKEN }}
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
