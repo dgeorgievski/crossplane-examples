@@ -1,1 +1,4 @@
 work/
+.venv/
+
+mkdocs/site/

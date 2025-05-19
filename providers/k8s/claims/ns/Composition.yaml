@@ -27,10 +27,8 @@ spec:
     - type: FromCompositeFieldPath
       fromFieldPath: spec.namespaceName
       toFieldPath: spec.forProvider.manifest.metadata.name
+    
     - type: FromCompositeFieldPath
       fromFieldPath: spec.labels
       toFieldPath: spec.forProvider.manifest.metadata.labels
 
-  - name: postgresql
-
-  - name: my-go-app
