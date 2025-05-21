@@ -1,0 +1,15 @@
+apiVersion: repo.github.upbound.io/v1alpha1
+kind: BranchProtection
+metadata:
+  name: github-crossplane-provider-testing
+spec:
+  forProvider:
+    repositoryIdRef:
+      name: github-crossplane-provider-testing
+    pattern: main
+    allowsDeletions: false
+    allowsForcePushes: false
+    requiredPullRequestReviews:
+      - requiredApprovingReviewCount: 2
+  providerConfigRef:
+    name: dgeorgievski-github
