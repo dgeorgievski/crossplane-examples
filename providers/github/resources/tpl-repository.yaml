@@ -1,0 +1,22 @@
+
+apiVersion: repo.github.upbound.io/v1alpha1
+kind: Repository
+metadata:
+  name: github-crossplane-provider-testing
+spec:
+  forProvider:
+    name: github-crossplane-provider-testing
+    visibility: public
+    gitignoreTemplate: Terraform
+  initProvider:
+    template: 
+      - owner: dgeorgievski 
+        repository: hello 
+        includeAllBranches: false 
+    squashMergeCommitTitle: PR_TITLE
+    vulnerabilityAlerts: true
+    topics:
+      - go
+    
+  providerConfigRef:
+    name: dgeorgievski-github

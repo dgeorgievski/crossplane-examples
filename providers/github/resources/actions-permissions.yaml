@@ -1,0 +1,12 @@
+apiVersion: actions.github.upbound.io/v1alpha1
+kind: ActionsRepositoryPermissions
+metadata:
+  name: testing-actions-permissions
+spec:
+  forProvider:
+    repository: github-crossplane-provider-testing
+    enabled: true
+    allowedActions: all
+    workflowPermissions: write
+  providerConfigRef:
+    name: dgeorgievski-github

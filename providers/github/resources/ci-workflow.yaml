@@ -1,0 +1,26 @@
+apiVersion: repo.github.upbound.io/v1alpha1
+kind: RepositoryFile
+metadata:
+  name: ci-workflow
+spec:
+  forProvider:
+    repositoryRef:
+      name: github-crossplane-provider-testing
+    file: .github/workflows/ci.yml
+    content: |
+      name: CI Workflow
+      on:
+        push:
+          branches: [ $default-branch ]
+        pull_request:
+          branches: [ $default-branch ]
+      jobs:
+        build:
+          runs-on: ubuntu-latest
+          steps:
+            - uses: actions/checkout@v4
+            - name: Run a one-line script
+              run: echo "Hello from Crossplane-managed workflow!"
+    branch: main
+  providerConfigRef:
+    name: dgeorgievski-github

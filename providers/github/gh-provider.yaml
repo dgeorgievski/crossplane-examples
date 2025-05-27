@@ -11,10 +11,12 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: provider-secret
-  namespace: upbound-system
+  namespace: crossplane-system
 type: Opaque
 stringData:
-  credentials: "{\"token\":\"${GH_TOKEN}\",\"owner\":\"${GH_OWNER}\"}"
+  credentials: "{\"token\":\"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\",\"owner\":\"dgeorgievski\"}"
+  
+  # credentials: "{\"token\":\"${GH_TOKEN}\",\"owner\":\"${GH_OWNER}\"}"
 
 # ---
 
