@@ -14,9 +14,9 @@ metadata:
   namespace: crossplane-system
 type: Opaque
 stringData:
-  credentials: "{\"token\":\"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\",\"owner\":\"dgeorgievski\"}"
+  credentials: "{\"token\":\"${GH_TOKEN}\",\"owner\":\"${GH_OWNER}\"}"
   
-  # credentials: "{\"token\":\"${GH_TOKEN}\",\"owner\":\"${GH_OWNER}\"}"
+  
 
 # ---
 
