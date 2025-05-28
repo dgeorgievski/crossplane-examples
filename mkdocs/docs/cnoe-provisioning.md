@@ -33,7 +33,7 @@ Check [colima's](https://github.com/abiosoft/colima) GitHub page for more inform
 Provision CNOE IDP cluster. This might take several minutes depending on the available bandwidth and CPU/Memory resources availability.
 ```sh
 > idpbuilder create --use-path-routing \
-  --name refstack
+  --name refstack \
   --package https://github.com/cnoe-io/stacks//ref-implementation \
   --package https://github.com/cnoe-io/stacks//crossplane-integrations \
   --package https://github.com/cnoe-io/stacks//localstack-integration
